@@ -1,0 +1,100 @@
+{
+  "theme_and_style": {
+    "archetype": "Swiss & High-Contrast (Functional, dense, technical)",
+    "mode": "Light and Dark (Toggle via localStorage, Tailwind 'class' strategy)",
+    "philosophy": "COMPACT UI. Density is paramount. Minimize whitespace while preserving readability. Use tight grid structures. Feels engineered, like an aviation dashboard or high-end code editor."
+  },
+  "typography": {
+    "font_family": {
+      "sans": "Geist, sans-serif"
+    },
+    "compact_scale": {
+      "h1_page_title": "text-base font-semibold tracking-tight",
+      "h2_section_title": "text-sm font-medium tracking-tight",
+      "body": "text-xs",
+      "labels": "text-[10px] uppercase tracking-wider font-medium text-muted",
+      "button_text": "text-xs font-medium"
+    },
+    "instructions_to_main_agent": "Import Geist font via CDN (e.g., from Vercel's Geist font CDN or Google Fonts if available, otherwise setup basic @font-face pointing to standard Geist CDN). Apply text sizes strictly following the compact scale."
+  },
+  "colors": {
+    "light_mode": {
+      "background": "#F7F7F8",
+      "surface": "#FFFFFF",
+      "border": "#E5E5E5",
+      "foreground": "#0A0A0A",
+      "muted": "#737373",
+      "muted_foreground": "#525252",
+      "primary": "#000000",
+      "primary_hover": "#262626"
+    },
+    "dark_mode": {
+      "background": "#0A0A0A",
+      "surface": "#121212",
+      "border": "#262626",
+      "foreground": "#FAFAFA",
+      "muted": "#525252",
+      "muted_foreground": "#A3A3A3",
+      "primary": "#FFFFFF",
+      "primary_hover": "#E5E5E5"
+    },
+    "tailwind_config_injection": "Define CSS variables in a <style> block and map them in the inline Tailwind config object (tailwind.config = { ... }). Use semantic names: bg-background, bg-surface, border-border, text-foreground, text-muted-foreground."
+  },
+  "spacing_and_layout": {
+    "sidebar": {
+      "expanded_width": "w-52",
+      "collapsed_width": "w-14",
+      "transition": "transition-[width] duration-300 ease-in-out"
+    },
+    "topbar": {
+      "height": "h-12",
+      "padding": "px-3 sm:px-4",
+      "background": "Solid surface color (NO transparent). Must use bg-surface with a subtle border-b border-border."
+    },
+    "containers": {
+      "padding": "p-3 sm:p-4",
+      "gap": "gap-3"
+    },
+    "elements": {
+      "button_height": "h-7",
+      "input_height": "h-7",
+      "border_radius": "rounded-md",
+      "icon_size": "w-4 h-4"
+    }
+  },
+  "components": {
+    "sidebar_nav_item": {
+      "classes": "flex items-center gap-2.5 px-2 py-1.5 rounded-md hover:bg-muted/10 text-xs font-medium transition-colors cursor-pointer text-muted-foreground hover:text-foreground",
+      "active_classes": "bg-muted/10 text-foreground"
+    },
+    "topbar_elements": {
+      "search_input": "h-7 text-xs rounded-md bg-background border-border pl-7 pr-3 focus:ring-1 focus:ring-primary w-48 sm:w-64",
+      "icon_button": "h-7 w-7 flex items-center justify-center rounded-md hover:bg-muted/10 transition-colors text-muted-foreground hover:text-foreground"
+    },
+    "empty_state_placeholder": {
+      "layout": "flex flex-col items-center justify-center h-[calc(100vh-9rem)] w-full rounded-lg border border-dashed border-border/80 bg-surface/50",
+      "visuals": "Use an inline Heroicon (e.g., Dashboard or Folder icon) styled with text-muted-foreground/30 at w-6 h-6, followed by text-xs font-medium text-muted-foreground mt-2. Keep it ultra-minimalist."
+    }
+  },
+  "icons": {
+    "library": "Heroicons (Inline SVG only)",
+    "sizing": "Compact UI demands small icons. Default to w-3.5 h-3.5 or w-4 h-4 max."
+  },
+  "motion": {
+    "micro_interactions": "Hover states on all buttons and nav links (transition-colors duration-200). Sidebar collapse needs smooth layout interpolation.",
+    "theme_switch": "Swap classes instantly on the root `<html>` element. Avoid heavy background transitions on theme swap to prevent performance jank."
+  },
+  "instructions_to_main_agent": {
+    "tailwind_cdn": "Insert `<script src=\"https://cdn.tailwindcss.com\"></script>` in the `<head>`. Immediately follow with a `<script>` setting `tailwind.config = { darkMode: 'class', theme: { extend: { colors: { background: 'var(--background)', surface: 'var(--surface)', border: 'var(--border)', foreground: 'var(--foreground)', 'muted': 'var(--muted)', 'muted-foreground': 'var(--muted-foreground)' }, fontFamily: { sans: ['Geist', 'sans-serif'] } } } }`. Add a `<style>` block for CSS variables mapped to the Light/Dark palettes defined above.",
+    "laravel_blade_context": "Write this as a single comprehensive HTML layout (simulating a Laravel Blade layout or view). You can use plain HTML + Tailwind, and simple Vanilla JS at the bottom of the document to handle the state (Theme toggle logic storing to localStorage, Sidebar collapse logic). NO React, NO Vue, NO Alpine.",
+    "compact_enforcement": "Strictly enforce small dimensions. Do NOT default to p-6 or p-8. Use p-2, p-3, p-4. Headings shouldn't exceed text-base.",
+    "accessibility_and_testing": "Include `data-testid` attributes on all interactive elements (theme-toggle, sidebar-toggle, nav-dashboard, user-menu, search-input)."
+  },
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
+    "You tend to converge toward generic outputs. Avoid this by making the compact UI feel deliberate, high-end, and technical.",
+    "Do NOT use transparent backgrounds over content. Headers must be solid.",
+    "Every interaction needs micro-animations (hover, active states).",
+    "Never use placeholder image URLs. Use Heroicons inline SVGs for all icons and avatars.",
+    "All interactive and key informational elements MUST include a `data-testid` attribute (e.g., `data-testid=\"theme-toggle-btn\"`)."
+  ]
+}
