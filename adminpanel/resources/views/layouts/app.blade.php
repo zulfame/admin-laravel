@@ -110,15 +110,15 @@
            data-testid="sidebar"
            class="relative z-30 hidden w-52 shrink-0 flex-col border-r border-border bg-surface transition-[width] duration-300 ease-in-out md:flex">
 
-        <div class="flex h-12 items-center gap-2 border-b border-border px-3">
-            <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-3.5 w-3.5">
+        <div class="flex h-12 items-center gap-2.5 border-b border-border px-3">
+            <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-[7px] bg-primary text-primary-foreground">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-[15px] w-[15px]">
                     <path d="M11.7 2.805a.75.75 0 0 1 .6 0A60.65 60.65 0 0 1 22.83 8.72a.75.75 0 0 1-.231 1.337 49.948 49.948 0 0 0-9.902 3.912l-.003.002a.75.75 0 0 1-.688 0 50.01 50.01 0 0 0-3.15-1.4l-.001 6.096c.99.24 1.96.535 2.907.883a.75.75 0 0 0 .518 0 49.28 49.28 0 0 1 6.209-1.899.75.75 0 0 1 .878.75v3.126a.75.75 0 0 1-.6.735 47.7 47.7 0 0 0-6.633 1.972.75.75 0 0 1-.51 0 47.7 47.7 0 0 0-6.633-1.972.75.75 0 0 1-.6-.735v-3.126a.75.75 0 0 1 .878-.75 49.28 49.28 0 0 1 .653.184V11.03a49.9 49.9 0 0 0-2.35 1.026.75.75 0 0 1-.69-1.333A60.653 60.653 0 0 1 11.7 2.805Z"/>
                 </svg>
             </div>
-            <div class="sb-label min-w-0 flex-1 overflow-hidden whitespace-nowrap">
-                <p class="truncate text-[13px] font-semibold leading-none tracking-tight">Nexus</p>
-                <p class="mt-1 truncate font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground">admin&nbsp;panel</p>
+            <div class="sb-label min-w-0 flex-1 overflow-hidden">
+                <p class="truncate text-[12.5px] font-semibold leading-[13px] tracking-[-0.01em]">Nexus</p>
+                <p class="mt-[3px] truncate font-mono text-[8px] font-medium uppercase leading-[9px] tracking-[0.16em] text-muted-foreground">Admin Panel</p>
             </div>
         </div>
 
