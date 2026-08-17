@@ -205,8 +205,8 @@
                 <div class="relative">
                     <button type="button" data-testid="user-menu-btn" onclick="toggleUserMenu(event)"
                             class="flex h-7 items-center gap-1.5 rounded-md pl-0.5 pr-1.5 transition-colors hover:bg-muted">
-                        <span class="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-[10px] font-semibold text-primary-foreground">AR</span>
-                        <span class="hidden text-[11.5px] font-medium sm:block">Admin</span>
+                        <span class="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-[10px] font-semibold text-primary-foreground">{{ Str::upper(Str::substr(auth()->user()->name, 0, 2)) }}</span>
+                        <span class="hidden max-w-[110px] truncate text-[11.5px] font-medium sm:block">{{ auth()->user()->name }}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-3 w-3 text-muted-foreground">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
                         </svg>
@@ -215,8 +215,8 @@
                     <div id="userMenu" data-testid="user-menu"
                          class="absolute right-0 top-9 z-50 hidden w-44 overflow-hidden rounded-lg border border-border bg-elevated p-1 shadow-xl shadow-black/5">
                         <div class="px-2 py-1.5">
-                            <p class="text-[11.5px] font-medium leading-tight">Admin Root</p>
-                            <p class="truncate font-mono text-[9.5px] text-muted-foreground">admin@nexus.local</p>
+                            <p class="text-[11.5px] font-medium leading-tight">{{ auth()->user()->name }}</p>
+                            <p class="truncate font-mono text-[9.5px] text-muted-foreground">{{ auth()->user()->email }}</p>
                         </div>
                         <div class="my-1 h-px bg-border"></div>
                         <button type="button" data-testid="menu-profile" class="flex h-7 w-full items-center gap-2 rounded px-2 text-[11.5px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
@@ -228,10 +228,13 @@
                             Pengaturan
                         </button>
                         <div class="my-1 h-px bg-border"></div>
-                        <button type="button" data-testid="menu-logout" class="flex h-7 w-full items-center gap-2 rounded px-2 text-[11.5px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="h-3.5 w-3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"/></svg>
-                            Keluar
-                        </button>
+                        <form method="POST" action="{{ route('logout') }}" data-testid="logout-form">
+                            @csrf
+                            <button type="submit" data-testid="menu-logout" class="flex h-7 w-full items-center gap-2 rounded px-2 text-[11.5px] text-red-600 transition-colors hover:bg-red-500/10 dark:text-red-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="h-3.5 w-3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"/></svg>
+                                Keluar
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

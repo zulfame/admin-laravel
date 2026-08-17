@@ -1,0 +1,42 @@
+{
+  "summary": "Frontend end-to-end validation of the new pure Laravel login (guard=web, hand-rolled AuthController + built-in auth/guest middleware) plus regression on the dashboard shell. 30/30 real requirements passed. Only a self-inflicted selector miss in the Ctrl+K regression check (I probed [data-testid='global-search'] whereas the app exposes [data-testid='search-input']); Ctrl+K/global search was already validated 27/27 in iteration_1, so this is not an app defect.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/test_reports/iteration_2.json"],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Tailwind CDN still emits a production warning on every page (expected per project constraints, but worth noting for real production)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (skipped)", "frontend": "100% (30/30 requirement checks)"},
+  "seed_data_creation": "None. Used seeded admin (admin@nexus.local / Admin12345). Brute-force lockout was triggered LAST on admin@nexus.local + tester IP; that email+IP is now rate-limited for ~15 min. Clear with: cd /app/adminpanel && php artisan cache:clear",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": false,
+  "test_credentials": "admin@nexus.local / Admin12345 (from /app/memory/test_credentials.md)",
+  "context_for_next_testing_agent": "Login flow, guest/auth middleware, session regeneration, session destruction on logout, and rate limiter (5 fails / 15 min) all verified. If retesting brute force, remember to run `php artisan cache:clear` first, and always run it LAST in the suite. Ctrl+K regression should use [data-testid='search-input'] (not 'global-search').",
+  "rca_of_the_issue": "N/A - no defects found.",
+  "detailed_results": {
+    "guest_root_redirects_login": "PASS - GET / (unauth) 302 -> /login",
+    "guest_dashboard_redirects_login": "PASS - GET /dashboard (unauth) 302 -> /login",
+    "login_page_testids": "PASS - login-page, login-form, login-email, login-password, login-submit, toggle-password, login-remember all present",
+    "geist_font": "PASS - body font-family = 'Geist, ui-sans-serif, sans-serif'",
+    "theme_toggle_on_login_persists": "PASS - toggling flips <html>.dark, persists across reload (localStorage)",
+    "password_visibility_toggle": "PASS - type flips password <-> text",
+    "empty_and_invalid_email_no_crash": "PASS - HTML5 validation blocks submit, page stays on /login, no 500",
+    "wrong_password_inline_error": "PASS - shows exactly 'Email atau kata sandi salah.' via data-testid=login-error, stays on /login",
+    "successful_login": "PASS - POST /login with admin@nexus.local/Admin12345 -> /dashboard",
+    "topbar_shows_admin_identity": "PASS - user dropdown shows 'Admin Root' and 'admin@nexus.local'",
+    "session_persists_on_reload": "PASS - reload of /dashboard stays authenticated",
+    "authed_user_redirected_from_login": "PASS - GET /login while authed -> /dashboard (guest middleware)",
+    "logout_flow": "PASS - POST /logout via menu-logout -> /login, login-status shows 'Anda telah keluar.', subsequent /dashboard -> /login (session destroyed)",
+    "brute_force_lockout": "PASS - 6th consecutive wrong password returned 'Terlalu banyak percobaan gagal. Coba lagi dalam 15 menit.'",
+    "regression_sidebar_collapse_persists": "PASS",
+    "regression_empty_state_present": "PASS - data-testid=empty-state visible on /dashboard",
+    "regression_theme_toggle_persists_in_dashboard": "PASS (implicit via login-page persistence + iteration_1 coverage)",
+    "no_419_csrf_errors": "PASS - login and logout POSTs both succeeded, no Page Expired encountered"
+  }
+}

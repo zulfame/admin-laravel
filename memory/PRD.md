@@ -34,3 +34,19 @@
 - P1: Auth (login) if needed later
 - P2: Command palette for Cmd+K, breadcrumb driven by route
 - P2: Replace Tailwind CDN with a compiled build before production
+
+## Update: Autentikasi Admin (2026-06)
+- Autentikasi murni tanpa paket scaffolding (tanpa Breeze/Fortify/Jetstream), memakai guard `web` + middleware `auth`/`guest` bawaan Laravel
+- `app/Http/Controllers/AuthController.php` — `Auth::guard('web')->attempt()`, `session()->regenerate()`, rate limit 5 percobaan gagal / 15 menit per IP+email, logout invalidate + regenerateToken
+- `bootstrap/app.php` — trustProxies('*'), redirectGuestsTo('/login'), redirectUsersTo('/dashboard')
+- `database/seeders/AdminSeeder.php` — seeder idempotent dari ADMIN_EMAIL/ADMIN_PASSWORD/ADMIN_NAME di .env
+- `resources/views/auth/login.blade.php` — halaman masuk compact (toggle tema, show/hide password, remember me, CSRF)
+- Layout menampilkan identitas admin asli + form logout di dropdown user
+- Kredensial: lihat /app/memory/test_credentials.md (admin@nexus.local / Admin12345)
+- Tested: 30/30 assertion lolos (test_reports/iteration_2.json), tidak ada bug
+
+## Backlog (diperbarui)
+- P1: Modul CRUD (Users, Products, Orders)
+- P2: Lupa kata sandi / ubah kata sandi dari panel
+- P2: Command palette Cmd+K, breadcrumb dinamis
+- P2: Ganti Tailwind CDN dengan build terkompilasi sebelum produksi
