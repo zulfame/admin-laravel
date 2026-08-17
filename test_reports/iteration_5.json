@@ -1,0 +1,27 @@
+{
+  "summary": "Frontend-only iteration 5 for Laravel 12 admin panel: verified responsive layout across 390/768/1280/1920 on /dashboard /interface /elements /datatable /profile, mobile drawer flow (open/backdrop-close/Escape-close/X-close/nav-navigate), asset refactor (single /assets/css/app.css + theme.js + tailwind.config.js + app.js all HTTP 200, zero console errors), whole-number typography scale (h1=18 h2=16 h3=14 p=13 mono=10) on every page, complete /profile flow (identity update persistence, avatar upload/remove with topbar sync, bad-file rejection), password change flow (wrong current, mismatch, valid change + relogin with OLD fails / NEW works + REVERT to Admin12345 verified). Regression on Interface/Elements/Datatable still green.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Password change endpoint is throttled to 5/min (throttle:5,1). Consecutive negative-path tests (wrong current + mismatch + weak + valid) exhausted the bucket and yielded 429. Consider a higher limit (e.g. 10/min) OR a distinct throttle key that separates failed vs successful attempts so QA can exercise all error branches without cache clear. Not blocking - can also just space out retries.",
+    "Client-side type=email prevents submitting 'not-an-email' via UI, so the profile-errors panel is never shown for invalid emails through the browser (server-side unique/email rule still enforced). If you want the profile-errors panel to be reachable for both invalid-format and duplicate-email cases through UI, add a novalidate on the form or a second admin user to trigger the unique rule."
+  ],
+  "critical_code_review_comments": [
+    "Tailwind CDN production warning still emitted (cdn.tailwindcss.com). Migrate to compiled Tailwind before shipping - unchanged from iter 4."
+  ],
+  "updated_files": [
+    "/app/adminpanel/resources/views/layouts/app.blade.php (added data-testid=\"sidebar-backdrop\" on #mobileOverlay and data-testid=\"sidebar-close\" + aria-label on the sidebar-header close X - pure testability, no behaviour change)"
+  ],
+  "success_rate": {"backend": "n/a", "frontend": "100%"},
+  "seed_data_creation": "None. Test avatar (8x8 PNG) uploaded then removed within the test. Password was temporarily rotated to Nexus2026Admin during the change flow and REVERTED back to Admin12345 - verified login works with Admin12345 after revert, so /app/memory/test_credentials.md remains accurate.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "admin@nexus.local / Admin12345 (unchanged after revert)",
+  "context_for_next_testing_agent": "Layout & assets: on every page at every viewport document.documentElement.scrollWidth == window.innerWidth and window.scrollY == 0 (elements page scrollHeight can still exceed viewport due to sr-only inputs used in Elements demo - expected, not a bug). /assets/css/app.css, /assets/js/theme.js, /assets/js/tailwind.config.js, /assets/js/app.js all load 200; no console errors on any page. Typography: dashboard/interface/elements/datatable/profile page titles measure 18px and their lead .ap-p 13px; interface also has 16px h2, 14px h3, 10px mono label. Mobile nav: #mobileOverlay now has data-testid=\"sidebar-backdrop\" (added) and the sidebar-header X has data-testid=\"sidebar-close\"; opening via mobile-menu-btn adds max-md:flex to #sidebar and un-hides #mobileOverlay; clicking anywhere on the overlay outside the sidebar (or Escape, or X, or the nav link) closes it (mouse.click(300,400) works because sidebar w-52=208 so click at x=300 lands on the overlay area). Profile: identity update writes name/email/title/phone/timezone/bio + optional avatar under storage/avatars/*, PUT /profile/password requires current + min 10 mixed case + numbers, session password_hash refreshed so no forced logout. Rate limits: profile update throttle:10,1, password throttle:5,1 - space out or run 'cd /app/adminpanel && php artisan cache:clear' between negative-path attempts. Verified end-to-end that changing password to Nexus2026Admin logs in with new, rejects old, then reverting to Admin12345 restores login - credentials file remains valid.",
+  "rca_of_the_issue": "n/a - no failures. Two Playwright quirks noted (not product bugs): (1) force-click on [data-testid=sidebar-backdrop] does not close the drawer because Playwright's forced click still targets the center of the overlay bbox which sits UNDER the sidebar (z-30). A real mouse.click(300,400) at any x>208 works, matching how a real user taps. (2) After the first tap to open the drawer, subsequent Playwright clicks on the mobile-menu-btn report 'subtree intercepts pointer events' from the aside overlaying the topbar - real users don't hit this because they close the drawer first via the visible X/backdrop before tapping the topbar again."
+}

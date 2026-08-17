@@ -8,8 +8,8 @@
 
     <div class="mb-3 flex flex-wrap items-end justify-between gap-2">
         <div>
-            <h1 class="text-[15px] font-semibold leading-none tracking-tight" data-testid="page-title">Dashboard</h1>
-            <p class="mt-1.5 text-[11.5px] text-muted-foreground">Ruang kerja masih kosong &mdash; siap diisi modul pertama Anda.</p>
+            <h1 class="ap-h1" data-testid="page-title">Dashboard</h1>
+            <p class="ap-p mt-1.5">Ruang kerja masih kosong &mdash; siap diisi modul pertama Anda.</p>
         </div>
         <div class="flex items-center gap-1.5">
             <button type="button" data-testid="refresh-btn"
@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    <div class="rise grid-canvas flex min-h-[calc(100vh-11.25rem)] w-full flex-col items-center justify-center rounded-lg border border-dashed border-border bg-surface/60 px-4 py-10"
+    <div class="rise grid-canvas flex min-h-[220px] w-full flex-col sm:min-h-[calc(100vh-11.5rem)] items-center justify-center rounded-lg border border-dashed border-border bg-surface/60 px-4 py-10"
          data-testid="empty-state">
         <div class="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4 text-muted-foreground">

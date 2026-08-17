@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="h-full">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,74 +9,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet">
 
-    <script>
-        (function () {
-            var t = localStorage.getItem('ap-theme');
-            if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            }
-        })();
-    </script>
-
+    <script src="{{ asset('assets/js/theme.js') }}"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        background: 'var(--background)',
-                        surface: 'var(--surface)',
-                        elevated: 'var(--elevated)',
-                        border: 'var(--border)',
-                        foreground: 'var(--foreground)',
-                        muted: 'var(--muted)',
-                        'muted-foreground': 'var(--muted-foreground)',
-                        primary: 'var(--primary)',
-                        'primary-foreground': 'var(--primary-foreground)',
-                        accent: 'var(--accent)',
-                    },
-                    fontFamily: {
-                        sans: ['Geist', 'ui-sans-serif', 'sans-serif'],
-                        mono: ['Geist Mono', 'ui-monospace', 'monospace'],
-                    },
-                }
-            }
-        }
-    </script>
-
-    <style>
-        :root {
-            --background: #F6F6F7; --surface: #FFFFFF; --elevated: #FFFFFF; --border: #E4E4E7;
-            --foreground: #0A0A0A; --muted: #F0F0F1; --muted-foreground: #71717A;
-            --primary: #0A0A0A; --primary-foreground: #FAFAFA; --accent: #2563EB;
-            --grid: rgba(9, 9, 11, 0.055);
-        }
-        .dark {
-            --background: #08080A; --surface: #101013; --elevated: #17171B; --border: #232328;
-            --foreground: #FAFAFA; --muted: #17171B; --muted-foreground: #8A8A94;
-            --primary: #FAFAFA; --primary-foreground: #0A0A0A; --accent: #60A5FA;
-            --grid: rgba(255, 255, 255, 0.045);
-        }
-        * { -webkit-font-smoothing: antialiased; }
-        body { font-feature-settings: "cv11", "ss01"; }
-        ::selection { background: var(--accent); color: #fff; }
-        .grid-canvas {
-            background-image:
-                linear-gradient(to right, var(--grid) 1px, transparent 1px),
-                linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
-            background-size: 14px 14px;
-        }
-        @keyframes riseIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-        .rise { animation: riseIn .5s cubic-bezier(.22,.61,.36,1) both; }
-        @keyframes shake { 10%,90%{transform:translateX(-1px)} 20%,80%{transform:translateX(2px)} 30%,50%,70%{transform:translateX(-3px)} 40%,60%{transform:translateX(3px)} }
-        .shake { animation: shake .4s cubic-bezier(.36,.07,.19,.97) both; }
-    </style>
+    <script src="{{ asset('assets/js/tailwind.config.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
 </head>
-<body class="grid-canvas flex min-h-screen items-center justify-center bg-background px-4 font-sans text-xs text-foreground">
+<body class="grid-canvas flex min-h-full items-center justify-center bg-background px-4 py-8 font-sans text-xs text-foreground">
 
-<button type="button" data-testid="theme-toggle"
-        onclick="var r=document.documentElement;r.classList.toggle('dark');localStorage.setItem('ap-theme',r.classList.contains('dark')?'dark':'light');"
+<button type="button" data-testid="theme-toggle" onclick="apToggleTheme()"
         class="fixed right-3 top-3 flex h-7 w-7 items-center justify-center rounded-md border border-border bg-surface text-muted-foreground transition-colors hover:text-foreground">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="hidden h-4 w-4 dark:block">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/>
@@ -122,29 +62,23 @@
             @csrf
 
             <div>
-                <label for="email" class="mb-1 block text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground">Email</label>
+                <label for="email" class="ap-label">Email</label>
                 <div class="relative">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="pointer-events-none absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 9.409a2.25 2.25 0 0 1-1.07-1.916V6.75"/>
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="ap-input-icon"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 9.409a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
                     <input id="email" name="email" type="email" required autofocus autocomplete="username"
                            value="{{ old('email') }}" placeholder="admin@nexus.local"
-                           data-testid="login-email"
-                           class="h-8 w-full rounded-md border border-border bg-background pl-7 pr-2 text-[11.5px] text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40">
+                           data-testid="login-email" class="ap-input !h-8 !pl-7">
                 </div>
             </div>
 
             <div>
-                <label for="password" class="mb-1 block text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground">Kata sandi</label>
+                <label for="password" class="ap-label">Kata sandi</label>
                 <div class="relative">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="pointer-events-none absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/>
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="ap-input-icon"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
                     <input id="password" name="password" type="password" required autocomplete="current-password"
                            placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
-                           data-testid="login-password"
-                           class="h-8 w-full rounded-md border border-border bg-background pl-7 pr-8 text-[11.5px] text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40">
-                    <button type="button" onclick="togglePw()" data-testid="toggle-password"
+                           data-testid="login-password" class="ap-input !h-8 !pl-7 !pr-8">
+                    <button type="button" onclick="apLoginPw()" data-testid="toggle-password"
                             class="absolute right-1 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded text-muted-foreground transition-colors hover:text-foreground">
                         <svg id="pwOn" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="h-3.5 w-3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
                         <svg id="pwOff" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="hidden h-3.5 w-3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243"/></svg>
@@ -172,14 +106,12 @@
 </div>
 
 <script>
-    function togglePw() {
+    function apLoginPw() {
         var i = document.getElementById('password');
-        var on = document.getElementById('pwOn');
-        var off = document.getElementById('pwOff');
         var hidden = i.type === 'password';
         i.type = hidden ? 'text' : 'password';
-        on.classList.toggle('hidden', hidden);
-        off.classList.toggle('hidden', !hidden);
+        document.getElementById('pwOn').classList.toggle('hidden', hidden);
+        document.getElementById('pwOff').classList.toggle('hidden', !hidden);
     }
 </script>
 </body>

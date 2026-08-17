@@ -1,52 +1,58 @@
-# Admin Panel (Laravel + SQLite)
+# Nexus Admin Panel (Laravel 12 + SQLite)
 
 ## Original problem statement
-"buatkan sebuah admin panel menggunakan dengan teknologi laravel dan sqlite, buat tempilan ui yang bagus hanya menggunakan tailwind dengan aturan wajib compact ui, untuk font full gunakan geist, buatkan saja 1 halaman dashboard halaman kosong atau placeholder, untuk tailwind gunakan cdn" (+ "tailwind juga gunakan cdn")
+"buatkan sebuah admin panel menggunakan teknologi laravel dan sqlite, buat tampilan ui yang bagus hanya menggunakan tailwind dengan aturan wajib compact ui, untuk font full gunakan geist, buatkan saja 1 halaman dashboard halaman kosong atau placeholder, untuk tailwind gunakan cdn"
 
-## User choices (2026-06)
-- No auth, straight to dashboard
-- Light + dark theme with toggle
-- Sidebar: Dashboard only
-- Dashboard content: completely empty placeholder
-- Icons: inline Heroicons SVG
+## Permintaan lanjutan (kronologis)
+1. Login admin — autentikasi murni tanpa paket, boleh pakai middleware `auth` bawaan dengan guard `web`
+2. Brand lockup lebih presisi (sidebar + login)
+3. Halaman **Interface** (katalog komponen, tanpa Authentication/Error pages, wajib ada Modals) & **Elements** (form elements ala Tabler)
+4. Searchable select (select2) tanpa paket
+5. Footer modal & form: 2 tombol → pojok kiri & pojok kanan
+6. Menu **Datatable** dengan 3 contoh tabel
+7. Modal: ukuran sm/md/lg + posisi center/top; modal konfirmasi disamakan dengan modal biasa
+8. Skala tipografi dinaikkan & bilangan bulat (18/16/14/13/10), diterapkan di semua halaman
+9. Semua CSS/JS dipindah ke struktur asset admin template
+10. UI rapi di semua ukuran device
+11. Halaman **Profil**: informasi diri + upload foto + ubah kata sandi (tanpa "Zona waktu"), header/footer card sama tinggi & rapat
 
-## Architecture
-- Laravel 12.66 (PHP 8.2), SQLite at /app/adminpanel/database/database.sqlite
-- Blade views, Tailwind via CDN (inline `tailwind.config`), Geist + Geist Mono from Google Fonts
-- Vanilla JS only (theme toggle, sidebar collapse, user dropdown, Cmd+K) — no Alpine/React/Vue
-- Served on port 3000 via `php artisan serve`; supervisor `frontend` program's start script in /app/frontend/package.json points to Laravel (`start:react` kept as the old CRA script)
+## Arsitektur
+- Laravel 12.66 (PHP 8.2), SQLite `database/database.sqlite`
+- Blade + Tailwind CDN (config inline via `assets/js/tailwind.config.js`), font Geist + Geist Mono
+- Vanilla JS saja (tanpa Alpine/jQuery/React)
+- Disajikan di port 3000 via `php artisan serve`; supervisor program `frontend` (script `start` di /app/frontend/package.json)
 
-## Files
-- routes/web.php — `/` -> redirect `/dashboard`; `/dashboard` -> view
-- resources/views/layouts/app.blade.php — shell (sidebar, topbar, footer, theme system)
-- resources/views/dashboard.blade.php — empty-state placeholder
+## Struktur asset
+```
+public/assets/css/app.css     tokens tema, skala tipografi, utilitas layout, komponen form, animasi
+public/assets/js/theme.js     bootstrap tema (anti FOUC) + apToggleTheme
+public/assets/js/tailwind.config.js
+public/assets/js/app.js       shell: sidebar, drawer mobile, user menu, dropdown, modal, toast, Cmd+K
+public/assets/js/interface.js tabs, accordion, rating, modal demo (sm/md/lg, center/top)
+public/assets/js/elements.js  form helpers + searchable select (single & multi)
+public/assets/js/datatable.js modul apDt (search, sort, perPage, pagination, kolom, select-all)
+public/assets/js/profile.js   pratinjau avatar, eye toggle, meter kekuatan sandi
+```
+
+## Halaman
+- `/login` — autentikasi murni (Auth::guard('web')->attempt, session regenerate, rate limit 5/15 menit)
+- `/dashboard` — placeholder empty state
+- `/interface` — 20 panel komponen
+- `/elements` — 21 panel form termasuk searchable select
+- `/datatable` — 3 contoh datatable
+- `/profile` — informasi diri + upload foto + ubah kata sandi
 
 ## Implemented (2026-06)
-- Compact UI shell: 48px topbar, 28px controls, 11.5px body type, dense sidebar
-- Collapsible sidebar (208px <-> 56px) with localStorage persistence
-- Light/dark theme via CSS variables + `dark` class, persisted, no FOUC
-- Search with Cmd/Ctrl+K, notification bell, user dropdown
-- Status footer (sqlite connected / laravel / php version)
-- Tested: 27/27 frontend assertions passed (iteration_1.json)
+- Shell compact: topbar 48px, kontrol 28px, sidebar collapsible 208↔56px, drawer di mobile
+- Tema light/dark via CSS variables, persist di localStorage, tanpa FOUC
+- Auth: guard web, bcrypt, throttle, seeder admin idempotent
+- Profil: kolom `avatar_path/title/phone/bio` (migrasi), upload ke disk `public` + `storage:link`, ubah sandi (min 10, mixedCase, angka) dengan sesi tetap aktif
+- Komponen `x-panel` dengan slot footer (header & footer 36px, rapat ke tepi kartu)
+- Testing: iterasi 1-6 semua hijau (`/app/test_reports/iteration_*.json`)
 
 ## Backlog
-- P1: Real CRUD modules (Users, Products, Orders) + Eloquent models/migrations
-- P1: Auth (login) if needed later
-- P2: Command palette for Cmd+K, breadcrumb driven by route
-- P2: Replace Tailwind CDN with a compiled build before production
-
-## Update: Autentikasi Admin (2026-06)
-- Autentikasi murni tanpa paket scaffolding (tanpa Breeze/Fortify/Jetstream), memakai guard `web` + middleware `auth`/`guest` bawaan Laravel
-- `app/Http/Controllers/AuthController.php` — `Auth::guard('web')->attempt()`, `session()->regenerate()`, rate limit 5 percobaan gagal / 15 menit per IP+email, logout invalidate + regenerateToken
-- `bootstrap/app.php` — trustProxies('*'), redirectGuestsTo('/login'), redirectUsersTo('/dashboard')
-- `database/seeders/AdminSeeder.php` — seeder idempotent dari ADMIN_EMAIL/ADMIN_PASSWORD/ADMIN_NAME di .env
-- `resources/views/auth/login.blade.php` — halaman masuk compact (toggle tema, show/hide password, remember me, CSRF)
-- Layout menampilkan identitas admin asli + form logout di dropdown user
-- Kredensial: lihat /app/memory/test_credentials.md (admin@nexus.local / Admin12345)
-- Tested: 30/30 assertion lolos (test_reports/iteration_2.json), tidak ada bug
-
-## Backlog (diperbarui)
-- P1: Modul CRUD (Users, Products, Orders)
-- P2: Lupa kata sandi / ubah kata sandi dari panel
-- P2: Command palette Cmd+K, breadcrumb dinamis
+- P1: Modul CRUD nyata (Users, Products, Orders) memakai Datatable sebagai basis
+- P1: Multi-user + peran/izin (saat ini hanya satu admin)
+- P2: Riwayat login (IP, waktu, status) & notifikasi nyata
+- P2: Command palette untuk Cmd+K
 - P2: Ganti Tailwind CDN dengan build terkompilasi sebelum produksi
